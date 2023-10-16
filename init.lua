@@ -109,6 +109,57 @@ require('lazy').setup({
     },
   },
 
+{
+  "pmizio/typescript-tools.nvim",
+  dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+  opts = {},
+},
+  
+  {
+    "lewis6991/hover.nvim",
+    config = function()
+        require("hover").setup {
+            init = function()
+                -- Require providers
+                local lspconfig = require('lspconfig')
+                lspconfig.phpactor.setup{}
+                lspconfig.gopls.setup{}
+                lspconfig.pyright.setup{}
+                require("hover.providers.lsp")
+                require('hover.providers.gh')
+                require('hover.providers.gh_user')
+                require('hover.providers.man')
+                require('hover.providers.dictionary')
+            end,
+            preview_opts = {
+                border = nil
+            },
+            -- Whether the contents of a currently open hover window should be moved
+            -- to a :h preview-window when pressing the hover keymap.
+            preview_window = false,
+            title = true
+        }
+
+        -- Setup keymaps
+        vim.keymap.set("n", "K", require("hover").hover, {desc = "hover.nvim"})
+        vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
+    end
+},
+  
+{
+  "ray-x/go.nvim",
+  dependencies = {  -- optional packages
+    "ray-x/guihua.lua",
+    "neovim/nvim-lspconfig",
+    "nvim-treesitter/nvim-treesitter",
+  },
+  config = function()
+    require("go").setup()
+  end,
+  event = {"CmdlineEnter"},
+  ft = {"go", 'gomod'},
+  build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+},
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
   {
@@ -144,10 +195,10 @@ require('lazy').setup({
 
   {
     -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
+    "folke/tokyonight.nvim",
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'onedark'
+      vim.cmd.colorscheme 'tokyonight'
     end,
   },
 
@@ -158,7 +209,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'onedark',
+        theme = 'tokyonight',
         component_separators = '|',
         section_separators = '',
       },
@@ -532,6 +583,5 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
