@@ -1,42 +1,3 @@
---[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-
-Kickstart.nvim is *not* a distribution.
-
-Kickstart.nvim is a template for your own configuration.
-  The goal is that you can read every line of code, top-to-bottom, understand
-  what your configuration is doing, and modify it to suit your needs.
-
-  Once you've done that, you should start exploring, configuring and tinkering to
-  explore Neovim!
-
-  If you don't know anything about Lua, I recommend taking some time to read through
-  a guide. One possible example:
-  - https://learnxinyminutes.com/docs/lua/
-
-
-  And then you can explore or search through `:help lua-guide`
-  - https://neovim.io/doc/user/lua-guide.html
-
-
-Kickstart Guide:
-
-I have left several `:help X` comments throughout the init.lua
-You should run that command and read that help section for more information.
-
-In addition, I have some `NOTE:` items throughout the file.
-These are for you, the reader to help understand what is happening. Feel free to delete
-them once you know what you're doing, but they should serve as a guide for when you
-are first encountering a few different constructs in your nvim config.
-
-I hope you enjoy your Neovim journey,
-- TJ
-
-P.S. You can delete this when you're done too. It's your config now :)
---]]
 -- Set <space> as the leader key
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
@@ -66,6 +27,8 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+  -- Live server
+  "aurum77/live-server.nvim",
 
   -- Git related plugins
   'tpope/vim-fugitive',
@@ -73,6 +36,72 @@ require('lazy').setup({
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
+
+  -- Code navigation (classes, methods, etc..)
+  {'stevearc/aerial.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = {
+       "nvim-treesitter/nvim-treesitter",
+       "nvim-tree/nvim-web-devicons"
+    },
+  },
+
+  -- Nvim notifications
+  {
+    "rcarriga/nvim-notify",
+    config = function()
+        local notify = require("notify")
+        -- this for transparency
+        notify.setup({ background_colour = "#000000" })
+        -- this overwrites the vim notify function
+        vim.notify = notify.notify
+    end
+  },
+    -- Prettier plugn for neovim
+  {'MunifTanjim/prettier.nvim', opts = {
+    bin = 'prettierd',
+    filetypes = {
+      "css",
+      "html",
+      "javascript",
+      "json",
+      "markdown",
+      "yaml",
+    },
+  }},
+  
+  {
+    "adalessa/laravel.nvim",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+      "tpope/vim-dotenv",
+      "MunifTanjim/nui.nvim",
+      "nvimtools/none-ls.nvim",
+    },
+    cmd = { "Sail", "Artisan", "Composer", "Npm", "Yarn", "Laravel" },
+    keys = {
+      { "<leader>la", ":Laravel artisan<cr>" },
+      { "<leader>lr", ":Laravel routes<cr>" },
+      { "<leader>lm", ":Laravel related<cr>" },
+    },
+    event = { "VeryLazy" },
+    config = true,
+  },
+ 
+  {
+    'nvimdev/lspsaga.nvim',
+    config = function()
+        require('lspsaga').setup({})
+    end,
+    dependencies = {
+        'nvim-treesitter/nvim-treesitter',
+        'nvim-tree/nvim-web-devicons',
+    },
+    event = {
+        'LspAttach',
+    },
+  },
 
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
@@ -91,28 +120,33 @@ require('lazy').setup({
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
     },
+    event = {
+      'LspAttach',
+    },
   },
 
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-    dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
+        dependencies = {
+          -- Snippet Engine & its associated nvim-cmp source
+          'L3MON4D3/LuaSnip',
+          'saadparwaiz1/cmp_luasnip',
 
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
+          -- Adds LSP completion capabilities
+          'hrsh7th/cmp-nvim-lsp',
 
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
-    },
+          -- Adds a number of user-friendly snippets
+          'rafamadriz/friendly-snippets',
+        },
   },
 
 {
   "pmizio/typescript-tools.nvim",
   dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-  opts = {},
+  opts = {
+      tsserver_path = "/usr/lib/node_modules/typescript/lib/tsserver.js"
+    },
 },
   
   {
