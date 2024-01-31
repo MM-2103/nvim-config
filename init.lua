@@ -38,12 +38,13 @@ require('lazy').setup({
   'tpope/vim-sleuth',
 
   -- Code navigation (classes, methods, etc..)
-  {'stevearc/aerial.nvim',
+  {
+    'stevearc/aerial.nvim',
     opts = {},
     -- Optional dependencies
     dependencies = {
-       "nvim-treesitter/nvim-treesitter",
-       "nvim-tree/nvim-web-devicons"
+      "nvim-treesitter/nvim-treesitter",
+      "nvim-tree/nvim-web-devicons"
     },
   },
 
@@ -51,26 +52,29 @@ require('lazy').setup({
   {
     "rcarriga/nvim-notify",
     config = function()
-        local notify = require("notify")
-        -- this for transparency
-        notify.setup({ background_colour = "#000000" })
-        -- this overwrites the vim notify function
-        vim.notify = notify.notify
+      local notify = require("notify")
+      -- this for transparency
+      notify.setup({ background_colour = "#000000" })
+      -- this overwrites the vim notify function
+      vim.notify = notify.notify
     end
   },
-    -- Prettier plugn for neovim
-  {'MunifTanjim/prettier.nvim', opts = {
-    bin = 'prettierd',
-    filetypes = {
-      "css",
-      "html",
-      "javascript",
-      "json",
-      "markdown",
-      "yaml",
-    },
-  }},
-  
+  -- Prettier plugn for neovim
+  {
+    'MunifTanjim/prettier.nvim',
+    opts = {
+      bin = 'prettierd',
+      filetypes = {
+        "css",
+        "html",
+        "javascript",
+        "json",
+        "markdown",
+        "yaml",
+      },
+    }
+  },
+  -- Laravel support for neovim
   {
     "adalessa/laravel.nvim",
     dependencies = {
@@ -88,18 +92,15 @@ require('lazy').setup({
     event = { "VeryLazy" },
     config = true,
   },
- 
+  -- Improves the builtin nvim lsp experience
   {
     'nvimdev/lspsaga.nvim',
     config = function()
-        require('lspsaga').setup({})
+      require('lspsaga').setup({})
     end,
     dependencies = {
-        'nvim-treesitter/nvim-treesitter',
-        'nvim-tree/nvim-web-devicons',
-    },
-    event = {
-        'LspAttach',
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
     },
   },
 
@@ -115,7 +116,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
+      { 'j-hui/fidget.nvim',       tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       'folke/neodev.nvim',
@@ -128,72 +129,72 @@ require('lazy').setup({
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
-        dependencies = {
-          -- Snippet Engine & its associated nvim-cmp source
-          'L3MON4D3/LuaSnip',
-          'saadparwaiz1/cmp_luasnip',
+    dependencies = {
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
 
-          -- Adds LSP completion capabilities
-          'hrsh7th/cmp-nvim-lsp',
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
 
-          -- Adds a number of user-friendly snippets
-          'rafamadriz/friendly-snippets',
-        },
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
+    },
   },
-
-{
-  "pmizio/typescript-tools.nvim",
-  dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-  opts = {
+  -- Typescript lsp
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {
       tsserver_path = "/usr/lib/node_modules/typescript/lib/tsserver.js"
     },
-},
-  
+  },
+  -- code documentation
   {
     "lewis6991/hover.nvim",
     config = function()
-        require("hover").setup {
-            init = function()
-                -- Require providers
-                local lspconfig = require('lspconfig')
-                lspconfig.phpactor.setup{}
-                lspconfig.gopls.setup{}
-                lspconfig.pyright.setup{}
-                require("hover.providers.lsp")
-                require('hover.providers.gh')
-                require('hover.providers.gh_user')
-                require('hover.providers.man')
-                require('hover.providers.dictionary')
-            end,
-            preview_opts = {
-                border = nil
-            },
-            -- Whether the contents of a currently open hover window should be moved
-            -- to a :h preview-window when pressing the hover keymap.
-            preview_window = false,
-            title = true
-        }
+      require("hover").setup {
+        init = function()
+          -- Require providers
+          local lspconfig = require('lspconfig')
+          lspconfig.phpactor.setup {}
+          lspconfig.gopls.setup {}
+          lspconfig.pyright.setup {}
+          require("hover.providers.lsp")
+          require('hover.providers.gh')
+          require('hover.providers.gh_user')
+          require('hover.providers.man')
+          require('hover.providers.dictionary')
+        end,
+        preview_opts = {
+          border = nil
+        },
+        -- Whether the contents of a currently open hover window should be moved
+        -- to a :h preview-window when pressing the hover keymap.
+        preview_window = false,
+        title = true
+      }
 
-        -- Setup keymaps
-        vim.keymap.set("n", "K", require("hover").hover, {desc = "hover.nvim"})
-        vim.keymap.set("n", "gK", require("hover").hover_select, {desc = "hover.nvim (select)"})
+      -- Setup keymaps
+      vim.keymap.set("n", "K", require("hover").hover, { desc = "hover.nvim" })
+      vim.keymap.set("n", "gK", require("hover").hover_select, { desc = "hover.nvim (select)" })
     end
-},
-  
-{
-  "ray-x/go.nvim",
-  dependencies = {  -- optional packages
-    "ray-x/guihua.lua",
-    "neovim/nvim-lspconfig",
-    "nvim-treesitter/nvim-treesitter",
   },
-  config = function()
-    require("go").setup()
-  end,
-  event = {"CmdlineEnter"},
-  ft = {"go", 'gomod'},
-  build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
-},
+
+  {
+    "ray-x/go.nvim",
+    dependencies = { -- optional packages
+      "ray-x/guihua.lua",
+      "neovim/nvim-lspconfig",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("go").setup()
+    end,
+    event = { "CmdlineEnter" },
+    ft = { "go", 'gomod' },
+    build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+  },
   -- Useful plugin to show you pending keybinds.
   { 'folke/which-key.nvim', opts = {} },
   {
@@ -213,26 +214,25 @@ require('lazy').setup({
 
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
-        vim.keymap.set({'n', 'v'}, ']c', function()
+        vim.keymap.set({ 'n', 'v' }, ']c', function()
           if vim.wo.diff then return ']c' end
           vim.schedule(function() gs.next_hunk() end)
           return '<Ignore>'
-        end, {expr=true, buffer = bufnr, desc = "Jump to next hunk"})
-        vim.keymap.set({'n', 'v'}, '[c', function()
+        end, { expr = true, buffer = bufnr, desc = "Jump to next hunk" })
+        vim.keymap.set({ 'n', 'v' }, '[c', function()
           if vim.wo.diff then return '[c' end
           vim.schedule(function() gs.prev_hunk() end)
           return '<Ignore>'
-        end, {expr=true, buffer = bufnr, desc = "Jump to previous hunk"})
+        end, { expr = true, buffer = bufnr, desc = "Jump to previous hunk" })
       end,
     },
   },
-
+  -- Theme
   {
-    -- Theme inspired by Atom
-    "folke/tokyonight.nvim",
+    'rose-pine/neovim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'tokyonight'
+      vim.cmd.colorscheme 'rose-pine'
     end,
   },
 
@@ -243,7 +243,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'tokyonight',
+        theme = 'rose-pine',
         component_separators = '|',
         section_separators = '',
       },
@@ -260,7 +260,13 @@ require('lazy').setup({
   },
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  {
+    'numToStr/Comment.nvim',
+    opts = {
+
+    },
+    lazy = false,
+  },
 
   -- Fuzzy Finder (files, lsp, etc)
   {
@@ -295,8 +301,8 @@ require('lazy').setup({
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
-  -- require 'kickstart.plugins.autoformat',
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.autoformat',
+  require 'kickstart.plugins.debug',
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    You can use this folder to prevent any conflicts with this init.lua if you're interested in keeping
@@ -617,5 +623,13 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
+
+-- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+--   vim.lsp.diagnostic.on_publish_diagnostics, {
+--     signs = false,
+--   }
+-- )
+
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
