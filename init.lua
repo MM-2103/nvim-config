@@ -19,7 +19,6 @@ if not vim.loop.fs_stat(lazypath) then
   }
 end
 vim.opt.rtp:prepend(lazypath)
-
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -27,6 +26,23 @@ vim.opt.rtp:prepend(lazypath)
 --    as they will be available in your neovim runtime.
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
+
+  -- Highlight Color
+  {
+  'brenoprata10/nvim-highlight-colors',
+    config = function()
+      require("nvim-highlight-colors").setup({})
+    end,
+  },
+  -- File explorer to edit/create files
+  {
+    'stevearc/oil.nvim',
+    opts = {},
+    -- Optional dependencies
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+  },
+  -- Theme changer TODO : add themes
+  'zaldih/themery.nvim',
   -- Live server
   "aurum77/live-server.nvim",
 
@@ -47,19 +63,8 @@ require('lazy').setup({
       "nvim-tree/nvim-web-devicons"
     },
   },
-
-  -- Nvim notifications
-  {
-    "rcarriga/nvim-notify",
-    config = function()
-      local notify = require("notify")
-      -- this for transparency
-      notify.setup({ background_colour = "#000000" })
-      -- this overwrites the vim notify function
-      vim.notify = notify.notify
-    end
-  },
-  -- Prettier plugn for neovim
+ 
+  -- Prettier plugin for neovim
   {
     'MunifTanjim/prettier.nvim',
     opts = {
@@ -103,7 +108,6 @@ require('lazy').setup({
       'nvim-tree/nvim-web-devicons',
     },
   },
-
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -140,15 +144,7 @@ require('lazy').setup({
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
-  },
-  -- Typescript lsp
-  {
-    "pmizio/typescript-tools.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {
-      tsserver_path = "/usr/lib/node_modules/typescript/lib/tsserver.js"
-    },
-  },
+  }, 
   -- code documentation
   {
     "lewis6991/hover.nvim",
@@ -229,10 +225,10 @@ require('lazy').setup({
   },
   -- Theme
   {
-    'rose-pine/neovim',
+    'EdenEast/nightfox.nvim',
     priority = 1000,
     config = function()
-      vim.cmd.colorscheme 'rose-pine'
+      vim.cmd.colorscheme 'carbonfox'
     end,
   },
 
@@ -243,7 +239,7 @@ require('lazy').setup({
     opts = {
       options = {
         icons_enabled = false,
-        theme = 'rose-pine',
+        theme = 'carbonfox',
         component_separators = '|',
         section_separators = '',
       },
@@ -353,7 +349,7 @@ vim.o.completeopt = 'menuone,noselect'
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
-
+vim.o.t_Co = 256
 -- [[ Basic Keymaps ]]
 
 -- Keymaps for better default experience
@@ -633,3 +629,10 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+-- Neovide
+if vim.g.neovide then
+  vim.o.guifont = "FiraCode Nerd Font:h11"
+  vim.g.neovide_scale_factor = 1.0
+  vim.g.neovide_hide_mouse_when_typing = true
+end
