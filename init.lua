@@ -27,22 +27,19 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: First, some plugins that don't require any configuration
 
+  -- Typescript
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+    opts = {},
+  },
   -- Highlight Color
   {
-  'brenoprata10/nvim-highlight-colors',
+    'brenoprata10/nvim-highlight-colors',
     config = function()
       require("nvim-highlight-colors").setup({})
     end,
   },
-  -- File explorer to edit/create files
-  {
-    'stevearc/oil.nvim',
-    opts = {},
-    -- Optional dependencies
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-  },
-  -- Theme changer TODO : add themes
-  'zaldih/themery.nvim',
   -- Live server
   "aurum77/live-server.nvim",
 
@@ -63,51 +60,7 @@ require('lazy').setup({
       "nvim-tree/nvim-web-devicons"
     },
   },
- 
-  -- Prettier plugin for neovim
-  {
-    'MunifTanjim/prettier.nvim',
-    opts = {
-      bin = 'prettierd',
-      filetypes = {
-        "css",
-        "html",
-        "javascript",
-        "json",
-        "markdown",
-        "yaml",
-      },
-    }
-  },
-  -- Laravel support for neovim
-  {
-    "adalessa/laravel.nvim",
-    dependencies = {
-      "nvim-telescope/telescope.nvim",
-      "tpope/vim-dotenv",
-      "MunifTanjim/nui.nvim",
-      "nvimtools/none-ls.nvim",
-    },
-    cmd = { "Sail", "Artisan", "Composer", "Npm", "Yarn", "Laravel" },
-    keys = {
-      { "<leader>la", ":Laravel artisan<cr>" },
-      { "<leader>lr", ":Laravel routes<cr>" },
-      { "<leader>lm", ":Laravel related<cr>" },
-    },
-    event = { "VeryLazy" },
-    config = true,
-  },
-  -- Improves the builtin nvim lsp experience
-  {
-    'nvimdev/lspsaga.nvim',
-    config = function()
-      require('lspsaga').setup({})
-    end,
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-      'nvim-tree/nvim-web-devicons',
-    },
-  },
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -144,7 +97,7 @@ require('lazy').setup({
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
     },
-  }, 
+  },
   -- code documentation
   {
     "lewis6991/hover.nvim",
@@ -235,10 +188,10 @@ require('lazy').setup({
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
-    -- See `:help lualine.txt`
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       options = {
-        icons_enabled = false,
+        icons_enabled = true,
         theme = 'carbonfox',
         component_separators = '|',
         section_separators = '',
@@ -619,20 +572,3 @@ cmp.setup {
     { name = 'luasnip' },
   },
 }
-
--- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
---   vim.lsp.diagnostic.on_publish_diagnostics, {
---     signs = false,
---   }
--- )
-
-
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
---
--- Neovide
-if vim.g.neovide then
-  vim.o.guifont = "FiraCode Nerd Font:h11"
-  vim.g.neovide_scale_factor = 1.0
-  vim.g.neovide_hide_mouse_when_typing = true
-end
